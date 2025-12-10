@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS/CSC/22/0034</title>
+    <script src="script/aframe.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <a-scene shadow="type: pcfsoft" renderer="antialias: true">
+
+        <!-- Assets -->
+        <a-assets>
+            <img id="brick-tile" src="img/tile-floor.jpeg" alt="brick tile texture">
+            <img id="chair" src="img/chair.jpeg" alt="chair">
+            <img id="cup" src="img/cup.png" alt="Cup on a table">
+            <img id="lamp-barrel" src="img/lamp-barrel.jpeg" alt="lamp barrel">
+            <img id="lamp-base" src="img/lamp-base.jpeg" alt="lamp base">
+            <img id="lamp-top" src="img/lamp-top.jpeg" alt="lamp top">
+            <img id="milk-tin" src="img/milk-tin.jpeg" alt="milk tin">
+            <img id="milo-tin" src="img/milo-tin.jpeg" alt="milo tin">
+            <img id="table-leg" src="img/table-leg.jpeg" alt="table leg">
+            <img id="table-top" src="img/table-top.jpeg" alt="table top">
+            <img id="adin-tile" src="img/adin-tile.jpeg" alt="adinkra tile">
+            <img id="fur-carpet" src="img/fur-carpet.jpeg" alt="floor carpet">
+        </a-assets>
+        <!-- Camera + cursor (for VR interaction) -->
+        <a-entity id="cameraRig" position="0 1.6 4">
+            <a-entity camera look-controls wasd-controls>
+                <a-entity cursor="fuse: false; rayOrigin: mouse" raycaster="objects: .clickable" position="0 0 -1"
+                    geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01"
+                    material="color: #111; shader: flat">
+                </a-entity>
+            </a-entity>
+        </a-entity>
+
+        <!-- Sky -->
+        <a-sky color="#a8d8ff"></a-sky>
+
+        <!-- Lights -->
+        <a-entity light="type: ambient; intensity: 0.5; color: #ffffff"></a-entity>
+        <a-entity light="type: directional; intensity: 0.9; castShadow: true; shadowMapWidth:1024; shadowMapHeight:1024"
+            position="2 6 4" rotation="-50 -30 0"></a-entity>
+        <a-entity light="type: point; intensity: 0.6; distance: 6" position="-2 2 -2"></a-entity>
+
+        <!-- Floor -->
+        <a-plane src="#brick-tile" position="0 0 0" rotation="-90 0 0" width="10" height="10" rotation="-90 0 0"
+            width="20" height="20" shadow="receive: true"></a-plane>
+
+        <!-- Decoration under table -->
+        <a-plane src="#fur-carpet" position="0 0.001 0" rotation="-90 0 0" width="3.2" height="3.2"
+            shadow="receive: true"></a-plane>
+        <a-ring src="#adin-tile" position="0 0.002 0" rotation="-90 0 0" radius-inner="0.9" radius-outer="1.5"
+            segments="64" material="side:double"></a-ring>
+
+        <!-- Round table -->
+        <a-entity id="table" position="0 0.7 0">
+            <!-- Table top -->
+            <a-cylinder src="#table-top" height="0.12" radius="1" shadow="cast: true; receive: true" position="0 0 0">
+            </a-cylinder>
+            <!-- Table legs (4) -->
+            <a-cylinder src="#table-leg" position="0.75 -0.5 0.75" radius="0.05" height="1.2"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#table-leg" position="-0.75 -0.5 0.75" radius="0.05" height="1.2"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#table-leg" position="0.75 -0.5 -0.75" radius="0.05" height="1.2"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#table-leg" position="-0.75 -0.5 -0.75" radius="0.05" height="1.2"
+                shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Milo Tin  -->
+        <a-entity position="0.35 0.85 0.15">
+            <a-cylinder radius="0.18" height="0.32" src="#milo-tin" shadow="cast: true"></a-cylinder>
+            <!-- lid -->
+            <a-cylinder position="0 0.165 0" radius="0.185" height="0.02" shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Milk Tin (cylinder with label) -->
+        <a-entity position="-0.35 0.85 -0.05">
+            <a-cylinder radius="0.18" height="0.32" src="#milk-tin" shadow="cast: true"></a-cylinder>
+            <!-- lid -->
+            <a-cylinder position="0 0.175 0" radius="0.185" height="0.02" shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Two Cups -->
+        <!-- Cup 1 -->
+        <a-entity position="0.05 0.78 -0.25" rotation="0 25 0">
+            <!-- 1. The Walls of the Cup (A hollow cylinder) -->
+            <a-cylinder id="cup-walls" radius="0.08" height="0.12" color="#f7f1e1" inner-radius="0.07" open-ended="true"
+                side="double" position="0 0.06 0" shadow="cast: true">
+            </a-cylinder>
+
+            <!-- 2. The Base of the Cup (a circle) -->
+            <a-circle id="cup-base" radius="0.08" color="#f7f1e1" rotation="-90 0 0" position="0 0 0"
+                shadow="cast: true">
+            </a-circle>
+
+            <!-- saucer -->
+            <a-ring position="0 -0.065 0" rotation="-90 0 0" radius-inner="0.09" radius-outer="0.12"></a-ring>
+            <!-- handle: torus -->
+            <a-torus position="0.1 0.05 0" rotation="0 90 0" radius="0.03" radius-tubular="0.01"></a-torus>
+        </a-entity>
+
+        <!-- Cup 2 -->
+        <!-- 1. The Walls of the Second Cup (Hollow) -->
+        <a-entity position="-0.05 0.78 0.25" rotation="0 -15 0">
+            <a-cylinder radius="0.07" height="0.11" color="#ffeedd" shadow="cast: true" inner-radius="0.065"
+                open-ended="true" side="double" position="0 0.055 0">
+            </a-cylinder>
+
+            <!-- 2. The Base of the Second Cup -->
+
+            <a-circle position="0 0 0" rotation="-90 0 0" radius="0.07" color="#ffeedd" shadow="cast: true">
+            </a-circle>
+
+            <!-- 3. The Handle (Torus) -->
+
+            <a-torus position="0.095 0.055 0" rotation="0 90 0" radius="0.025" radius-tubular="0.008" color="#ffeedd"
+                shadow="cast: true">
+            </a-torus>
+        </a-entity>
+
+
+
+        <!-- Chairs (4) using boxes and cylinders, placed around the table -->
+        <!-- Chair structure - seat, back, legs -->
+        <!-- Front chair (positive Z) -->
+        <a-entity position="0 0 1.6" rotation="0 180 0">
+            <!-- seat -->
+            <a-box src="#chair" position="0 0.45 0" width="0.65" depth="0.5" height="0.07" shadow="cast: true"></a-box>
+            <!-- back -->
+            <a-box src="#chair" position="0 0.85 -0.2" width="0.65" depth="0.08" height="0.8"
+                shadow="cast: true"></a-box>
+            <!-- legs -->
+            <a-cylinder src="#chair" position="0.28 0.15 0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#chair" position="-0.28 0.15 0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#chair" position="0.28 0.15 -0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#chair" position="-0.28 0.15 -0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Back chair (negative Z) -->
+        <a-entity position="0 0 -1.6" rotation="0 -180 0">
+            <a-box src="#chair" position="0 0.45 0" width="0.65" depth="0.5" height="0.07" shadow="cast: true"></a-box>
+            <a-box src="#chair" position="0 0.85 0.2" width="0.65" depth="0.08" height="0.8"
+                shadow="cast: true"></a-box>
+            <!-- legs -->
+            <a-cylinder src="#chair" position="0.28 0.15 0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#chair" position="-0.28 0.15 0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#chair" position="0.28 0.15 -0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#chair" position="-0.28 0.15 -0.18" radius="0.03" height="0.5"
+                shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Left chair (negative X) -->
+        <a-entity position="-1.6 0 0" rotation="0 90 0">
+            <a-box src="#chair" position="0 0.45 0" width="0.65" depth="0.5" height="0.07" shadow="cast: true"></a-box>
+            <a-box src="#chair" position="0 0.85 -0.2" width="0.65" depth="0.08" height="0.8"
+                shadow="cast: true"></a-box>
+            <!-- legs -->
+            <a-cylinder position="0.28 0.15 0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder position="-0.28 0.15 0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder position="0.28 0.15 -0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder position="-0.28 0.15 -0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Right chair (positive X) -->
+        <a-entity position="1.6 0 0" rotation="0 -90 0">
+            <a-box src="#chair" position="0 0.45 0" width="0.65" depth="0.5" height="0.07" shadow="cast: true"></a-box>
+            <a-box src="#chair" position="0 0.85 -0.2" width="0.65" depth="0.08" height="0.8"
+                shadow="cast: true"></a-box>
+            <!-- legs -->
+            <a-cylinder position="0.28 0.15 0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder position="-0.28 0.15 0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder position="0.28 0.15 -0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder position="-0.28 0.15 -0.18" radius="0.03" height="0.5" src="#chair"
+                shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- A plant -->
+        <a-entity position="-2.5 0 1.8">
+            <a-cylinder src="#lamp-base" radius="0.22" height="0.28" position="0 0.14 0"
+                shadow="cast: true"></a-cylinder>
+            <a-cylinder src="#lamp-barrel" radius="0.06" height="1.0" position="0 0.75 0" segments-radial="6"
+                shadow="cast: true"></a-cylinder>
+            <!-- leaves made from cones -->
+            <a-cone src="#lamp-top" position="0 1.05 0" radius-bottom="0.35" height="0.5" rotation="0 0 0"></a-cone>
+            <a-cone src="#lamp-top" position="0.08 1.2 0" radius-bottom="0.28" height="0.45"
+                rotation="10 20 0"></a-cone>
+        </a-entity>
+
+        <!-- Ceiling lamp (sphere + point light) -->
+        <a-entity position="0 3 0">
+            <a-sphere radius="0.12" color="#fff2b3" position="0 0 0"></a-sphere>
+            <a-entity light="type: point; intensity: 1.0; distance: 6; decay:2" position="0 -0.2 0"></a-entity>
+            <!-- thin wire -->
+            <a-cylinder height="2.1" radius="0.01" color="#222" position="0 -1.05 0"></a-cylinder>
+        </a-entity>
+
+        <!-- enable shadows for entities that should receive them -->
+        <a-entity id="shadowEnabler">
+        </a-entity>
+
+    </a-scene>
+
+    <body>
+
+    </body>
+
+</html>
